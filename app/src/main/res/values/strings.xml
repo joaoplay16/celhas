@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Celhas</string>
+    <string name="agendamento">Agendamento</string>
+    <string name="clientes">Clientes</string>
+</resources>
