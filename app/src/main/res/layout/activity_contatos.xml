@@ -12,12 +12,27 @@
     tools:context="status200.com.br.celhas.ContatoActivity"
     android:orientation="vertical">
 
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:id="@+id/edtPesquisa"
-        android:hint="Pesquisar" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:id="@+id/edtPesquisa"
+            android:hint="Pesquisar"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="@android:string/ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnSelect"
+            android:layout_weight="1"
+            android:onClick="selecionarContatos" />
+    </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"

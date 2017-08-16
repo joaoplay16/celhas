@@ -47,17 +47,14 @@ public class ClienteArrayAdapter extends ArrayAdapter< Cliente >{
 //            viewHolder.checkContato = (CheckBox)view.findViewById(R.id.checkContato);
 
             view.setTag(viewHolder);
-//            viewHolder.checkContato.setChecked(cliente.isChecked());
-//            viewHolder.checkContato.setTag(cliente);
+
             convertView = view;
 
         }
         else
         {
             viewHolder = (ViewHolder)convertView.getTag();
-            viewHolder.checkContato = (CheckBox) viewHolder.checkContato.getTag();
-
-                viewHolder.checkContato.setChecked(cliente.isChecked());
+//            viewHolder.checkContato.setChecked(cliente.isChecked());
 
             view = convertView;
         }

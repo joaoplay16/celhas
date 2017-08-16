@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import status200.com.br.celhas.ContatoArrayAdapter;
 import status200.com.br.celhas.R;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class RepositorioContato {
     public void inserir(Cliente contato)
     {
         ContentValues values = preencheContentValues(contato);
-        conn.insertOrThrow(Cliente.TABELA, null, values);
+        conn.insertOrThrow(Cliente.TABELA,null , values);
     }
 
 
@@ -85,6 +86,34 @@ public class RepositorioContato {
         }
 
         return adpClientes;
+
+    }
+
+    public List<Cliente> buscaClientesList()
+    {
+
+        List<Cliente> listaClientesSalvos = new ArrayList<Cliente>();
+
+        Cursor cursor  =  conn.query(Cliente.TABELA, null, null, null, null, null, null);
+
+        if (cursor.getCount() > 0 )
+        {
+
+            cursor.moveToFirst();
+
+            do {
+
+                Cliente cliente = new Cliente();
+                cliente.setId( cursor.getLong( cursor.getColumnIndex(Cliente.ID) ) );
+                cliente.setNome( cursor.getString( cursor.getColumnIndex(Cliente.NOME ) ) );
+                cliente.setTelefone( cursor.getString( cursor.getColumnIndex(Cliente.TELEFONE ) ) );
+                listaClientesSalvos.add(cliente);
+
+            }while (cursor.moveToNext());
+
+        }
+
+        return listaClientesSalvos;
 
     }
 

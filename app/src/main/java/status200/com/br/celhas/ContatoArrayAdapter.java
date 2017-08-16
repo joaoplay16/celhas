@@ -1,26 +1,27 @@
 package status200.com.br.celhas;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import status200.com.br.celhas.R;
 import status200.com.br.celhas.model.Cliente;
-
-/**
- * Created by PauloVinicius on 16/05/2015.
- */
-public class ContatoArrayAdapter extends ArrayAdapter<Cliente>{
+public  class ContatoArrayAdapter extends ArrayAdapter<Cliente>{
 
     private int resource = 0;
     private LayoutInflater inflater;
     private Context context;
-
+    static List<Cliente> listaCliente = new ArrayList<Cliente>();
 
     public ContatoArrayAdapter(Context context, int resource)
     {
@@ -57,6 +58,8 @@ public class ContatoArrayAdapter extends ArrayAdapter<Cliente>{
             view = convertView;
         }
 
+
+
         viewHolder.checkContato.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,13 +67,19 @@ public class ContatoArrayAdapter extends ArrayAdapter<Cliente>{
 
                 if(check.isChecked()){
                     cliente.setChecked(true);
+                    if(!listaCliente.contains(cliente))
+                        listaCliente.add(cliente);
                     Toast.makeText(context, cliente.getNome() + " marcado = " + cliente.isChecked(), Toast.LENGTH_LONG ).show();
                 }else {
                     cliente.setChecked(false);
+                    if(listaCliente.contains(cliente))
+                        listaCliente.remove(cliente);
+
                     Toast.makeText(context, cliente.getNome() + " marcado = " + cliente.isChecked(), Toast.LENGTH_LONG ).show();
                 }
             }
         });
+
 
         viewHolder.txtNome.setText(cliente.getNome());
         viewHolder.txtTelefone.setText(cliente.getTelefone());
@@ -78,11 +87,20 @@ public class ContatoArrayAdapter extends ArrayAdapter<Cliente>{
         return view;
     }
 
+    public List<Cliente> getListaCliente() {
+        return listaCliente;
+    }
+
+    public void setListaCliente(List<Cliente> listaCliente) {
+        this.listaCliente = listaCliente;
+    }
+
     static class ViewHolder
     {
         TextView txtNome;
         TextView txtTelefone;
         CheckBox checkContato;
+        Button selecionarContatos;
     }
 
 

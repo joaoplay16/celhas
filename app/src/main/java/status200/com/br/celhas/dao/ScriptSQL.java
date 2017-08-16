@@ -12,7 +12,7 @@ public class ScriptSQL {
           sqlBuilder.append("_id                INTEGER       NOT NULL ");
           sqlBuilder.append("PRIMARY KEY AUTOINCREMENT, ");
           sqlBuilder.append("NOME               VARCHAR (200), ");
-          sqlBuilder.append("TELEFONE           VARCHAR (14) ");
+          sqlBuilder.append("TELEFONE           VARCHAR (14) UNIQUE");
           sqlBuilder.append(");");
 
           return sqlBuilder.toString();

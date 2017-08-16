@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class Cliente implements Serializable{
 
-    public static String TABELA = "CONTATO";
+    public static String TABELA = "CLIENTE";
     public static String ID = "_id";
     public static String NOME = "NOME";
     public static String TELEFONE = "TELEFONE";
@@ -22,6 +22,23 @@ public class Cliente implements Serializable{
     }
 
     private long id;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cliente cliente = (Cliente) o;
+
+        return telefone.equals(cliente.telefone);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return telefone.hashCode();
+    }
+
     private String nome;
     private String telefone;
     private boolean checked = false;

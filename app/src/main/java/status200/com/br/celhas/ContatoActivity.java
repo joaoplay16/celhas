@@ -1,28 +1,40 @@
 package status200.com.br.celhas;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import me.drakeet.materialdialog.MaterialDialog;
 import status200.com.br.celhas.app.MessageBox;
+import status200.com.br.celhas.dao.DataBase;
 import status200.com.br.celhas.dao.RepositorioContato;
 import status200.com.br.celhas.model.Cliente;
+import status200.com.br.celhas.util.FiltraDados;
 
 public class ContatoActivity extends AppCompatActivity {
-
+    private Button btnSelect;
     private EditText edtPesquisa;
     private ListView listView;
     private MaterialDialog mMaterialDialog;
     private ArrayAdapter<Cliente> adpContatos;
+    private List<Cliente> contatosSelecionados;
+    private SQLiteDatabase conn;
+    private DataBase dataBase;
     private RepositorioContato repositorioContato;
 
     private static final int REQUEST_PERMISSIONS_CODE = 128;
@@ -35,9 +47,23 @@ public class ContatoActivity extends AppCompatActivity {
 
         listView = (ListView)findViewById(R.id.listViewCon);
         edtPesquisa  = (EditText)findViewById(R.id.edtPesquisa);
-        callreadContacts();
+        btnSelect = (Button)findViewById(R.id.btnSelect);
 
+        try {
+
+
+            dataBase = new DataBase(this);
+            conn = dataBase.getWritableDatabase();
+
+            repositorioContato = new RepositorioContato(conn);
+
+        }catch(SQLException ex)
+        {
+            MessageBox.show(this, "Erro", "Erro ao criar o banco: " + ex.getMessage());
+        }
+        callreadContacts();
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -60,8 +86,10 @@ public class ContatoActivity extends AppCompatActivity {
     public void carregarContatos(){
 
         try{
-            repositorioContato = new RepositorioContato(null);
+            DataBase dataBase = new DataBase(this);
+            repositorioContato = new RepositorioContato(dataBase.getWritableDatabase());
             adpContatos = repositorioContato.buscaContatos(this);
+
             listView.setAdapter(adpContatos);
 
             FiltraDados filtraDados = new FiltraDados(adpContatos);
@@ -71,6 +99,28 @@ public class ContatoActivity extends AppCompatActivity {
             MessageBox.show(this, "Erro", "Erro no repositorio" + ex.getMessage());
         }
     }
+
+    public void selecionarContatos(View v){
+        try {
+            List<Cliente>  selecaoContatos = ContatoArrayAdapter.listaCliente;
+            List<Cliente> listaClienteSAlvo = repositorioContato.buscaClientesList();
+            if (selecaoContatos != null && selecaoContatos.size() > 0) {
+                for (Cliente contato : selecaoContatos) {
+                    if(!listaClienteSAlvo.contains(contato))
+                    repositorioContato.inserir(contato);
+                }
+
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Intent i = new Intent(ContatoActivity.this, ClientesActivity.class);
+        startActivity(i);
+
+        Log.i("CONTATOS",ContatoArrayAdapter.listaCliente.toString());
+    }
+
 
     public void callreadContacts() {
 
@@ -88,28 +138,6 @@ public class ContatoActivity extends AppCompatActivity {
         }
     }
 
-    private class FiltraDados implements TextWatcher {
-        private ArrayAdapter<Cliente> arrayAdapter;
-
-        private FiltraDados(ArrayAdapter<Cliente> arrayAdapter)
-        {
-            this.arrayAdapter = arrayAdapter;
-        }
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            arrayAdapter.getFilter().filter(s);
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    }
 
 
     // UTIL
@@ -133,4 +161,13 @@ public class ContatoActivity extends AppCompatActivity {
                 });
         mMaterialDialog.show();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(conn!=null){
+            conn.close();
+        }
+    }
 }
+

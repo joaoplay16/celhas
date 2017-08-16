@@ -28,7 +28,8 @@
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/txtNome" />
+            android:id="@+id/txtNome"
+            android:textSize="18sp" />
 
         <TextView
             android:text="TextView"

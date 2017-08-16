@@ -10,10 +10,10 @@ import status200.com.br.celhas.model.Cliente;
  * Created by joao on 12/08/17.
  */
 
-public class FIltraDados implements TextWatcher{
-    private ArrayAdapter<Cliente> arrayAdapter;
+public class FiltraDados implements TextWatcher{
+    public ArrayAdapter<Cliente> arrayAdapter;
 
-    private FiltraDados(ArrayAdapter<Cliente> arrayAdapter)
+    public FiltraDados(ArrayAdapter<Cliente> arrayAdapter)
     {
         this.arrayAdapter = arrayAdapter;
     }
