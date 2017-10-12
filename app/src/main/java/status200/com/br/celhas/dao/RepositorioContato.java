@@ -36,6 +36,7 @@ public class RepositorioContato {
 
         values.put(Cliente.NOME    , cliente.getNome());
         values.put(Cliente.TELEFONE    , cliente.getTelefone());
+        values.put(Cliente.IMAGEM    , cliente.getImagem());
 
 
         return values;
@@ -67,7 +68,6 @@ public class RepositorioContato {
         ClienteArrayAdapter adpClientes = new ClienteArrayAdapter(context, R.layout.item_cliente );
 
         Cursor cursor  =  conn.query(Cliente.TABELA, null, null, null, null, null, null);
-
         if (cursor.getCount() > 0 )
         {
 
@@ -79,13 +79,17 @@ public class RepositorioContato {
                 cliente.setId( cursor.getLong( cursor.getColumnIndex(Cliente.ID) ) );
                 cliente.setNome( cursor.getString( cursor.getColumnIndex(Cliente.NOME ) ) );
                 cliente.setTelefone( cursor.getString( cursor.getColumnIndex(Cliente.TELEFONE ) ) );
+                cliente.setImagem( cursor.getString( cursor.getColumnIndex(Cliente.IMAGEM ) ) );
                 adpClientes.add(cliente);
 
             }while (cursor.moveToNext());
 
         }
 
+        cursor.close();
         return adpClientes;
+
+
 
     }
 
@@ -112,7 +116,7 @@ public class RepositorioContato {
             }while (cursor.moveToNext());
 
         }
-
+        cursor.close();
         return listaClientesSalvos;
 
     }

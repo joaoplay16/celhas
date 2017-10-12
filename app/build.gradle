@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "status200.com.br.celhas"
-        minSdkVersion 17
+        minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -35,5 +35,4 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:10.2.0'
     compile 'me.drakeet.materialdialog:library:1.2.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
-
 }

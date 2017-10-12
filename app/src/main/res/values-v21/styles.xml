@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="estilozo" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/personalizada</item>
+        <item name="colorPrimaryDark">@color/lite_blue</item>
+        <item name="colorAccent">@color/componentes</item>
+        <item name="android:statusBarColor">@color/barra_de_status</item>
+    </style>
+</resources>

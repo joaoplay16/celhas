@@ -12,6 +12,7 @@ public class Cliente implements Serializable{
     public static String ID = "_id";
     public static String NOME = "NOME";
     public static String TELEFONE = "TELEFONE";
+    public static String IMAGEM = "IMAGEM";
 
     public long getId() {
         return id;
@@ -22,25 +23,18 @@ public class Cliente implements Serializable{
     }
 
     private long id;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Cliente cliente = (Cliente) o;
-
-        return telefone.equals(cliente.telefone);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return telefone.hashCode();
-    }
-
     private String nome;
     private String telefone;
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
+    }
+
+    private String imagem;
     private boolean checked = false;
 
     public boolean isChecked() {
@@ -70,5 +64,20 @@ public class Cliente implements Serializable{
     @Override
     public String toString() {
         return nome + " " + telefone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Cliente cliente = (Cliente) o;
+
+        return telefone.equals(cliente.telefone);
+    }
+
+    @Override
+    public int hashCode() {
+        return telefone.hashCode();
     }
 }

@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="estilozo" parent="Theme.AppCompat.Light.DarkActionBar" >
+        <item name="colorPrimary">@color/personalizada</item>
+        <item name="colorPrimaryDark">@color/lite_blue</item>
+        <item name="colorAccent">@color/componentes</item>
+    </style>
+
 </resources>

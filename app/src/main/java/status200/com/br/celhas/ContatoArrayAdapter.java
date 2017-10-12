@@ -69,13 +69,12 @@ public  class ContatoArrayAdapter extends ArrayAdapter<Cliente>{
                     cliente.setChecked(true);
                     if(!listaCliente.contains(cliente))
                         listaCliente.add(cliente);
-                    Toast.makeText(context, cliente.getNome() + " marcado = " + cliente.isChecked(), Toast.LENGTH_LONG ).show();
                 }else {
                     cliente.setChecked(false);
                     if(listaCliente.contains(cliente))
                         listaCliente.remove(cliente);
 
-                    Toast.makeText(context, cliente.getNome() + " marcado = " + cliente.isChecked(), Toast.LENGTH_LONG ).show();
+
                 }
             }
         });
@@ -87,13 +86,6 @@ public  class ContatoArrayAdapter extends ArrayAdapter<Cliente>{
         return view;
     }
 
-    public List<Cliente> getListaCliente() {
-        return listaCliente;
-    }
-
-    public void setListaCliente(List<Cliente> listaCliente) {
-        this.listaCliente = listaCliente;
-    }
 
     static class ViewHolder
     {

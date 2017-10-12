@@ -5,18 +5,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import me.drakeet.materialdialog.MaterialDialog;
@@ -54,7 +52,6 @@ public class ContatoActivity extends AppCompatActivity {
 
             dataBase = new DataBase(this);
             conn = dataBase.getWritableDatabase();
-
             repositorioContato = new RepositorioContato(conn);
 
         }catch(SQLException ex)
@@ -86,8 +83,6 @@ public class ContatoActivity extends AppCompatActivity {
     public void carregarContatos(){
 
         try{
-            DataBase dataBase = new DataBase(this);
-            repositorioContato = new RepositorioContato(dataBase.getWritableDatabase());
             adpContatos = repositorioContato.buscaContatos(this);
 
             listView.setAdapter(adpContatos);
@@ -101,24 +96,29 @@ public class ContatoActivity extends AppCompatActivity {
     }
 
     public void selecionarContatos(View v){
-        try {
-            List<Cliente>  selecaoContatos = ContatoArrayAdapter.listaCliente;
-            List<Cliente> listaClienteSAlvo = repositorioContato.buscaClientesList();
-            if (selecaoContatos != null && selecaoContatos.size() > 0) {
-                for (Cliente contato : selecaoContatos) {
-                    if(!listaClienteSAlvo.contains(contato))
-                    repositorioContato.inserir(contato);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<Cliente>  selecaoContatos = ContatoArrayAdapter.listaCliente;
+                    List<Cliente> listaClienteSAlvo = repositorioContato.buscaClientesList();
+                    if (selecaoContatos != null && selecaoContatos.size() > 0) {
+                        for (Cliente contato : selecaoContatos) {
+                            if(!listaClienteSAlvo.contains(contato))
+                                repositorioContato.inserir(contato);
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-
+                Intent i = new Intent(ContatoActivity.this, ClientesActivity.class);
+                startActivity(i);
             }
+        };
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        Intent i = new Intent(ContatoActivity.this, ClientesActivity.class);
-        startActivity(i);
 
-        Log.i("CONTATOS",ContatoArrayAdapter.listaCliente.toString());
+        Thread thread = new Thread(r);
+        thread.start();
     }
 
 
@@ -169,5 +169,6 @@ public class ContatoActivity extends AppCompatActivity {
             conn.close();
         }
     }
+
 }
 
