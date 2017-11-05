@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="status200.com.br.celhas">
 
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,8 +19,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".ClientesActivity" />
-        <activity android:name=".ActivityInfoContato"/>
-        <!--<activity android:name=".ContatoActivity"></activity>-->
+        <activity android:name=".ActivityInfoContato" />
+        <!-- <activity android:name=".ContatoActivity"></activity> -->
+        <activity android:name=".NovoClienteActivity"></activity>
+        <receiver android:name=".util.AlarmeReceiver">
+            <intent-filter>
+                <action android:name="ALARME"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

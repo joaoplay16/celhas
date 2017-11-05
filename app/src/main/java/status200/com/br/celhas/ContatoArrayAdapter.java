@@ -92,7 +92,7 @@ public  class ContatoArrayAdapter extends ArrayAdapter<Cliente>{
         TextView txtNome;
         TextView txtTelefone;
         CheckBox checkContato;
-        Button selecionarContatos;
+
     }
 
 

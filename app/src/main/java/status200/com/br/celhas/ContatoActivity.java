@@ -62,26 +62,8 @@ public class ContatoActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-
-        switch( requestCode ){
-            case REQUEST_PERMISSIONS_CODE:
-                for( int i = 0; i < permissions.length; i++ ){
-
-                    if( permissions[i].equalsIgnoreCase( Manifest.permission.READ_CONTACTS )
-                            && grantResults[i] == PackageManager.PERMISSION_GRANTED ){
-
-                        callreadContacts();
-
-                    }
-                }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 
     public void carregarContatos(){
-
         try{
             adpContatos = repositorioContato.buscaContatos(this);
 
@@ -121,6 +103,23 @@ public class ContatoActivity extends AppCompatActivity {
         thread.start();
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        switch( requestCode ){
+            case REQUEST_PERMISSIONS_CODE:
+                for( int i = 0; i < permissions.length; i++ ){
+
+                    if( permissions[i].equalsIgnoreCase( Manifest.permission.READ_CONTACTS )
+                            && grantResults[i] == PackageManager.PERMISSION_GRANTED ){
+
+                        callreadContacts();
+                    }
+                }
+             }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
     public void callreadContacts() {
 
@@ -167,6 +166,7 @@ public class ContatoActivity extends AppCompatActivity {
         super.onDestroy();
         if(conn!=null){
             conn.close();
+            dataBase.close();
         }
     }
 

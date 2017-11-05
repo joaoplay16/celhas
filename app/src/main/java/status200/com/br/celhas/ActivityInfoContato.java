@@ -40,17 +40,17 @@ public class ActivityInfoContato extends AppCompatActivity {
         imgCliente=(ImageView)findViewById(R.id.imgInfoCliente);
 
         Bundle extra = getIntent().getExtras();
-        if(extra!=null){
-             cliente = (Cliente) extra.getSerializable("cliente");
+        if(extra!=null && extra.containsKey("cliente")){
+            cliente = (Cliente) extra.getSerializable("cliente");
             txtNome.setText(cliente.getNome());
             txtTelefone.setText(cliente.getTelefone());
-
-            if(cliente.getImagem()!=null) {
-                imgCliente.setImageBitmap(BitmapFactory.decodeFile(cliente.getImagem()));
-            }else{
-                imgCliente.setImageResource(R.drawable.user_male);
-            }
         }
+        if (cliente.getImagem() != null) {
+            imgCliente.setImageBitmap(BitmapFactory.decodeFile(cliente.getImagem()));
+        } else {
+            imgCliente.setImageResource(R.drawable.user_male);
+        }
+
         imgCliente.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,7 +93,6 @@ public class ActivityInfoContato extends AppCompatActivity {
 
         }
     }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 

@@ -17,9 +17,7 @@ import status200.com.br.celhas.model.Cliente;
 import status200.com.br.celhas.provider.ContatosProvider;
 
 
-/**
- * Created by Paulo on 05/04/2015.
- */
+
 public class RepositorioContato {
 
     private SQLiteDatabase conn;
@@ -36,6 +34,7 @@ public class RepositorioContato {
 
         values.put(Cliente.NOME    , cliente.getNome());
         values.put(Cliente.TELEFONE    , cliente.getTelefone());
+        values.put(Cliente.ANIVERSARIO, cliente.getAniversario().getTime());
         values.put(Cliente.IMAGEM    , cliente.getImagem());
 
 
@@ -43,22 +42,23 @@ public class RepositorioContato {
 
     }
 
-    public void excluir(long id)
+    public int excluir(long id)
     {
-        conn.delete(Cliente.TABELA, " _id = ? ", new String[]{ String.valueOf( id ) });
+        return conn.delete(Cliente.TABELA, " _id = ? ", new String[]{ String.valueOf( id ) });
     }
 
-    public void alterar(Cliente contato)
+    public int alterar(Cliente contato)
     {
         ContentValues values = preencheContentValues(contato);
-        conn.update(Cliente.TABELA, values, " _id = ? ", new String[]{ String.valueOf( contato.getId()) } );
+
+        return conn.update(Cliente.TABELA, values, " _id = ? ", new String[]{ String.valueOf( contato.getId()) } );
 
     }
 
-    public void inserir(Cliente contato)
+    public long inserir(Cliente contato)
     {
         ContentValues values = preencheContentValues(contato);
-        conn.insertOrThrow(Cliente.TABELA,null , values);
+       return  conn.insertOrThrow(Cliente.TABELA,null , values);
     }
 
 
@@ -78,7 +78,8 @@ public class RepositorioContato {
                 Cliente cliente = new Cliente();
                 cliente.setId( cursor.getLong( cursor.getColumnIndex(Cliente.ID) ) );
                 cliente.setNome( cursor.getString( cursor.getColumnIndex(Cliente.NOME ) ) );
-                cliente.setTelefone( cursor.getString( cursor.getColumnIndex(Cliente.TELEFONE ) ) );
+                cliente.setTelefone( cursor.getString( cursor.getColumnIndex(Cliente.TELEFONE )) );
+                cliente.setAniversario(new Date(cursor.getLong(cursor.getColumnIndex(Cliente.ANIVERSARIO))));
                 cliente.setImagem( cursor.getString( cursor.getColumnIndex(Cliente.IMAGEM ) ) );
                 adpClientes.add(cliente);
 
@@ -110,6 +111,7 @@ public class RepositorioContato {
                 Cliente cliente = new Cliente();
                 cliente.setId( cursor.getLong( cursor.getColumnIndex(Cliente.ID) ) );
                 cliente.setNome( cursor.getString( cursor.getColumnIndex(Cliente.NOME ) ) );
+                cliente.setAniversario(new Date(cursor.getLong(cursor.getColumnIndex(Cliente.ANIVERSARIO))));
                 cliente.setTelefone( cursor.getString( cursor.getColumnIndex(Cliente.TELEFONE ) ) );
                 listaClientesSalvos.add(cliente);
 

@@ -1,6 +1,8 @@
 package status200.com.br.celhas.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by joao on 01/07/17.
@@ -13,6 +15,7 @@ public class Cliente implements Serializable{
     public static String NOME = "NOME";
     public static String TELEFONE = "TELEFONE";
     public static String IMAGEM = "IMAGEM";
+    public  static String ANIVERSARIO = "ANIVERSARIO";
 
     public long getId() {
         return id;
@@ -25,6 +28,15 @@ public class Cliente implements Serializable{
     private long id;
     private String nome;
     private String telefone;
+    private String imagem;
+    private Date aniversario;
+    private boolean checked = false;
+
+
+    public Cliente (){
+        this.aniversario = new Date(2000,0,1);
+    }
+
 
     public String getImagem() {
         return imagem;
@@ -34,8 +46,7 @@ public class Cliente implements Serializable{
         this.imagem = imagem;
     }
 
-    private String imagem;
-    private boolean checked = false;
+
 
     public boolean isChecked() {
         return checked;
@@ -59,6 +70,14 @@ public class Cliente implements Serializable{
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public Date getAniversario() {
+        return aniversario;
+    }
+
+    public void setAniversario(Date aniversario) {
+        this.aniversario = aniversario;
     }
 
     @Override

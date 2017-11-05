@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    tools:context="status200.com.br.celhas.NovoClienteActivity"
+    android:weightSum="1">
+
+    <QuickContactBadge
+        android:id="@+id/qcbCliente"
+        android:layout_width="210dp"
+        app:srcCompat="@drawable/user_female"
+        android:layout_height="188dp"
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/edtNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nome"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/edtTelefone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/edt_telefone"
+        android:inputType="number|phone" />
+
+    <EditText
+        android:id="@+id/edtAniversario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/data_de_aniversario"
+        android:inputType="date" />
+
+    <Button
+        android:id="@+id/btnSalvar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_salvar"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:background="@color/barra_de_status"
+        android:textColor="@color/card_background"
+        android:layout_gravity="bottom|end"
+        android:onClick="salvar" />
+
+</LinearLayout>

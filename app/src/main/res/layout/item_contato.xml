@@ -17,7 +17,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="230dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout">
 
         <TextView
             android:text="TextView"
@@ -42,6 +43,7 @@
         android:clickable="false"
         android:focusable="false"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

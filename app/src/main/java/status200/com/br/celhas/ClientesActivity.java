@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import status200.com.br.celhas.dao.DataBase;
 import status200.com.br.celhas.dao.RepositorioContato;
@@ -33,14 +37,14 @@ public class ClientesActivity extends AppCompatActivity implements AdapterView.O
 
         carregarClientes();
         listViewCli.setOnItemClickListener(this);
+        listViewCli.setOnCreateContextMenuListener(this);
     }
 
     public void carregarClientes(){
-        DataBase conn = new DataBase(this);
-        repositorioContato = new RepositorioContato(conn.getWritableDatabase());
+        dataBase = new DataBase(this);
+        repositorioContato = new RepositorioContato(dataBase.getWritableDatabase());
         adpClientes = repositorioContato.buscaClientes(this);
         listViewCli.setAdapter(adpClientes);
-        conn.close();
         FiltraDados filtraDados = new FiltraDados(adpClientes);
         edtPesquisaCli.addTextChangedListener(filtraDados);
 
@@ -54,9 +58,50 @@ public class ClientesActivity extends AppCompatActivity implements AdapterView.O
         startActivity(i);
     }
 
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        menu.add("Editar");
+        menu.add("Excluir");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info =
+                (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        Cliente cliente = (Cliente) listViewCli.getItemAtPosition((int) info.id);
+
+        switch (item.getTitle().toString()){
+            case "Editar":
+                Intent  i = new Intent(this, NovoClienteActivity.class);
+                i.putExtra("cliente",cliente);
+                startActivity(i);
+                break;
+            case "Excluir":
+                repositorioContato.excluir(cliente.getId());
+                adpClientes.remove(cliente);
+                adpClientes.notifyDataSetChanged();
+                Toast.makeText(this, cliente.getNome() + " excluida(o)",Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         carregarClientes();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dataBase.close();
     }
 }
