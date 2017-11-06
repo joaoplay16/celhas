@@ -32,6 +32,7 @@ public class AlarmeReceiver extends BroadcastReceiver {
 
         Intent i = new Intent(context, ActivityInfoContato.class);
         i.putExtra("cliente",cliente);
+
         int _id = (int) System.currentTimeMillis();
         PendingIntent pi =
                 PendingIntent.getActivity(context, _id, i,0);

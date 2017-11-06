@@ -11,9 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,10 +49,11 @@ public class ActivityInfoContato extends AppCompatActivity {
             imgCliente.setImageResource(R.drawable.user_male);
         }
 
-        imgCliente.setOnClickListener(new View.OnClickListener() {
+        imgCliente.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onLongClick(View view) {
                 callreadImagem();
+                return false;
             }
         });
     }
@@ -95,16 +94,13 @@ public class ActivityInfoContato extends AppCompatActivity {
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-
         switch( requestCode ){
             case REQUEST_PERMISSIONS_CODE:
                 for( int i = 0; i < permissions.length; i++ ){
-
                     if( permissions[i].equalsIgnoreCase( Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             && grantResults[i] == PackageManager.PERMISSION_GRANTED ){
 
                         callreadImagem();
-
                     }
                 }
         }

@@ -73,7 +73,6 @@ public class ClienteArrayAdapter extends ArrayAdapter< Cliente >{
         TextView txtNome;
         TextView txtTelefone;
         ImageView imgCliente;
-        CheckBox checkContato;
     }
 
 

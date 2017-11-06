@@ -85,15 +85,6 @@ public class Cliente implements Serializable{
         return nome + " " + telefone;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Cliente cliente = (Cliente) o;
-
-        return telefone.equals(cliente.telefone);
-    }
 
     @Override
     public int hashCode() {
