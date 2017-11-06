@@ -55,25 +55,28 @@ public class ClienteArrayAdapter extends ArrayAdapter< Cliente >{
 
         viewHolder.txtNome.setText(cliente.getNome());
         viewHolder.txtTelefone.setText(cliente.getTelefone());
-//        if(cliente.getImagem()!= null) {
-//            viewHolder.imgCliente.setImageBitmap(BitmapFactory.decodeFile(cliente.getImagem()));
-//        }else{
-//
-//            viewHolder.imgCliente.setImageResource(R.drawable.user_male);
-//        }
 
-        ImageTask imgTask = new ImageTask(cliente, viewHolder.imgCliente);
-        imgTask.execute();
+
+        //Previnindo o recycle de view
+        if (viewHolder.imgTask != null) {
+            viewHolder.imgTask.cancel(true);
+            viewHolder.imgTask = null;
+        }
+
+        //Previnido que a imagem "pisque" caso de um scroll muito rápido;
+        viewHolder.imgCliente.setImageResource(R.drawable.user_male);
+        viewHolder.imgTask = new ImageTask(context,cliente, viewHolder.imgCliente);
+        viewHolder.imgTask.execute();
+
         return view;
-
     }
 
     static class ViewHolder
     {
         TextView txtNome;
         TextView txtTelefone;
+        ImageTask imgTask;
         ImageView imgCliente;
-        CheckBox checkContato;
     }
 
 

@@ -93,6 +93,7 @@ public class Cliente implements Serializable{
         Cliente cliente = (Cliente) o;
 
         return telefone.equals(cliente.telefone);
+
     }
 
     @Override

@@ -1,17 +1,24 @@
 package status200.com.br.celhas;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -23,6 +30,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 
+import me.drakeet.materialdialog.MaterialDialog;
 import status200.com.br.celhas.app.MessageBox;
 import status200.com.br.celhas.dao.DataBase;
 import status200.com.br.celhas.dao.RepositorioContato;
@@ -30,12 +38,13 @@ import status200.com.br.celhas.model.Cliente;
 import status200.com.br.celhas.util.AlarmeAniversario;
 import status200.com.br.celhas.util.DateUtils;
 
-public class NovoClienteActivity extends AppCompatActivity implements View.OnClickListener{
+public class NovoClienteActivity extends AppCompatActivity implements View.OnLongClickListener{
     private static final int REQUEST_PERMISSIONS_CODE = 128;
     private static int RESULTADO_IMAGEM;
 
     private EditText edtNome,edtTelefone,edtAniversario;
     private Button btnSalvar;
+    private MaterialDialog mMaterialDialog;
     private QuickContactBadge qcbCliente;
     private DataBase dataBase;
     private RepositorioContato repositorioContato;
@@ -61,19 +70,21 @@ public class NovoClienteActivity extends AppCompatActivity implements View.OnCli
             String aniversario = DateUtils.dateToString(cliente.getAniversario());
             edtAniversario.setText(aniversario.substring(0,5));
             btnSalvar.setText("Atualizar");
-            if(cliente.getImagem()!=null) {
-                qcbCliente.setImageBitmap(BitmapFactory.decodeFile(cliente.getImagem()));
-            }else{
-                qcbCliente.setImageResource(R.drawable.user_male);
-            }
+
         }else {
             cliente = new Cliente();
+        }
+
+        if(cliente.getImagem()!=null) {
+            qcbCliente.setImageBitmap(BitmapFactory.decodeFile(cliente.getImagem()));
+        }else{
+            qcbCliente.setImageResource(R.drawable.user_male);
         }
 
         ExibeDataListener listener = new ExibeDataListener();
         edtAniversario.setOnClickListener(listener);
         edtAniversario.setOnFocusChangeListener(listener);
-        qcbCliente.setOnClickListener(this);
+        qcbCliente.setOnLongClickListener(this);
 
         try {
             dataBase = new DataBase(this);
@@ -83,37 +94,41 @@ public class NovoClienteActivity extends AppCompatActivity implements View.OnCli
         {
             MessageBox.show(this, "Erro", "Erro ao criar o banco: " + ex.getMessage());
         }
-
     }
 
     public void salvar(View v){
         repositorioContato =
                 new RepositorioContato(dataBase.getWritableDatabase());
+        String nome = edtNome.getText().toString();
+        String telefone = edtTelefone.getText().toString();
 
-        cliente.setNome(edtNome.getText().toString());
-        cliente.setTelefone(edtTelefone.getText().toString());
-
-        if (cliente.getId() == 0){
-            repositorioContato.inserir(cliente);
-
-            Toast.makeText(this, "Cliente adicionado!", Toast.LENGTH_SHORT ).show();
-        }else{
-
-            int sucesso = repositorioContato.alterar(cliente);
-
-            if(sucesso>0) {
-
+        if(nome.equals("") || nome.equals(null)){
+            edtNome.setError("Digite o nome");
+            edtNome.requestFocus();
+        }else if(telefone.equals("") || telefone.equals(null)){
+            edtTelefone.setError("Digite o telefone");
+            edtTelefone.requestFocus();
+        }else {
+            cliente.setNome(nome);
+            cliente.setTelefone(telefone);
+            if (cliente.getId() == 0){
+                repositorioContato.inserir(cliente);
+                Toast.makeText(this, "Cliente adicionado!", Toast.LENGTH_SHORT).show();
+                finish();
+            }else{
+                int sucesso = repositorioContato.alterar(cliente);
+                if(sucesso>0) {
+                    Toast.makeText(this, "Cliente atualizado!", Toast.LENGTH_SHORT).show();
+                }
                 AlarmeAniversario.definirAlarme(this, cliente);
-                Toast.makeText(this, "Cliente atualizado!", Toast.LENGTH_SHORT).show();
-                Log.i("DATA", cliente.getAniversario().toString());
             }
         }
-
     }
 
     @Override
-    public void onClick(View view) {
-        getImagem();
+    public boolean onLongClick(View view) {
+        callreadImagem();
+        return false;
     }
 
     public void getImagem(){
@@ -121,6 +136,25 @@ public class NovoClienteActivity extends AppCompatActivity implements View.OnCli
                 Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULTADO_IMAGEM);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_novo_cliente,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        switch (item.getItemId()){
+            case R.id.menu_cdt:
+                i = new Intent(this, ContatoActivity.class);
+                startActivity(i);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -138,15 +172,8 @@ public class NovoClienteActivity extends AppCompatActivity implements View.OnCli
             int columnIndex = cursor.getColumnIndex(colunaDoArquivoDeImagem[0]);
             String caminhoDaImagem = cursor.getString(columnIndex);
             cursor.close();
-
             qcbCliente.setImageBitmap(BitmapFactory.decodeFile(caminhoDaImagem));
-
-//            DataBase conn = new DataBase(this);
-//            RepositorioContato repositorioContato = new RepositorioContato(conn.getWritableDatabase());
             cliente.setImagem(caminhoDaImagem);
-//            repositorioContato.alterar(cliente);
-//            conn.close();
-
         }
     }
 
@@ -182,6 +209,59 @@ public class NovoClienteActivity extends AppCompatActivity implements View.OnCli
             edtAniversario.setText(dt);
             cliente.setAniversario(data);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch( requestCode ){
+            case REQUEST_PERMISSIONS_CODE:
+                for( int i = 0; i < permissions.length; i++ ){
+                    if( permissions[i].equalsIgnoreCase( Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            && grantResults[i] == PackageManager.PERMISSION_GRANTED ){
+
+                        callreadImagem();
+                    }
+                }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void callreadImagem() {
+
+        if( ContextCompat.checkSelfPermission( this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) != PackageManager.PERMISSION_GRANTED ){
+            //verifica se o usuario negou a permissao mais de uma vez
+            if( ActivityCompat.shouldShowRequestPermissionRationale( this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) ){
+                callDialog( "É preciso conceder a permissão WRITE_EXTERNAL_STORAGE para usar imagens da galeria", new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE} );
+            }
+            else{
+                ActivityCompat.requestPermissions( this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_CODE );
+            }
+        }
+        else{
+            getImagem();
+        }
+    }
+
+    // UTIL
+    private void callDialog( String message, final String[] permissions ){
+        mMaterialDialog = new MaterialDialog(this)
+                .setTitle("Permissão")
+                .setMessage( message )
+                .setPositiveButton("Ok", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        ActivityCompat.requestPermissions(NovoClienteActivity.this, permissions, REQUEST_PERMISSIONS_CODE);
+                        mMaterialDialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancelar", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mMaterialDialog.dismiss();
+                    }
+                });
+        mMaterialDialog.show();
     }
 
     @Override

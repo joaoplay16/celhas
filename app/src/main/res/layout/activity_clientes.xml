@@ -14,12 +14,12 @@
         android:layout_height="41dp">
 
         <EditText
-            android:layout_width="322dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/edtPesquisaCli"
-            android:hint="Pesquisar"
+            android:hint="@string/pesquisar"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -27,7 +27,6 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:id="@+id/listViewCli" />
 
 </LinearLayout>

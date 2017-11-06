@@ -5,4 +5,5 @@
     <string name="data_de_aniversario">Data de aniversário</string>
     <string name="btn_salvar">Salvar</string>
     <string name="edt_telefone">Telefone</string>
+    <string name="pesquisar">Pesquisar</string>
 </resources>

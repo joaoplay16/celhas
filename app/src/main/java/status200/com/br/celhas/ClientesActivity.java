@@ -1,10 +1,12 @@
 package status200.com.br.celhas;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -94,6 +96,25 @@ public class ClientesActivity extends AppCompatActivity implements AdapterView.O
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_clientes, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        switch (item.getItemId()){
+            case R.id.menu_novo:
+                i = new Intent(this, NovoClienteActivity.class);
+                startActivity(i);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         carregarClientes();
@@ -104,4 +125,5 @@ public class ClientesActivity extends AppCompatActivity implements AdapterView.O
         super.onDestroy();
         dataBase.close();
     }
+
 }
