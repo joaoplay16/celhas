@@ -1,7 +1,10 @@
 package status200.com.br.celhas.util;
 
+<<<<<<< HEAD
 import android.content.Context;
 import android.content.res.Resources;
+=======
+>>>>>>> master
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -31,6 +34,7 @@ public class ImageTask extends AsyncTask<String, String, Bitmap> {
 
 	@Override
 	// Este método executa numa thread a parte
+<<<<<<< HEAD
 	protected Bitmap doInBackground(String... params) {
 		String image = cliente.getImagem();
 		Resources resources = context.getResources();
@@ -49,13 +53,43 @@ public class ImageTask extends AsyncTask<String, String, Bitmap> {
 		}else{
 			return BitmapFactory.decodeResource(resources, R.drawable.user_male);
 		}
+=======
+	protected Void doInBackground(String... params) {
+
+		publishProgress(cliente.getImagem());
+
+
+
+		return null;
+>>>>>>> master
 	}
 
 	@Override
 	// Este método executa diretamente na UI thread, portanto pode alterar a
 	// interface gráfica
 	protected void onProgressUpdate(String... values) {
+<<<<<<< HEAD
 
+=======
+		String image = values[0];
+		if(cliente.getImagem()!= null) {
+			try {
+				BitmapFactory.Options options = new BitmapFactory.Options();
+        /*Reduzindo a qualidade da imagem para preservar memoria.
+        * Aqui você pode testar a redução que melhor atende sua necessidade
+        */
+				options.inSampleSize = 20;
+
+				Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(image), null, options);
+				imagem.setImageBitmap(bitmap);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+
+		}else{
+			imagem.setImageResource(R.drawable.user_male);
+		}
+>>>>>>> master
 	}
 
 	@Override

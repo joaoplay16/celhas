@@ -5,10 +5,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+<<<<<<< HEAD
 
 import java.util.Calendar;
 import java.util.Date;
 
+=======
+>>>>>>> master
 import status200.com.br.celhas.model.Cliente;
 import static android.content.Context.ALARM_SERVICE;
 
